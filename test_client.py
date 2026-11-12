@@ -6,9 +6,14 @@ socket.connect("tcp://127.0.0.1:55001")
 
 
 def run_test(name, request, expected):
+
+    # Send a request
     socket.send_json(request)
+
+    # Recieve a response
     actual = socket.recv_json()
 
+    # Display results
     rows = []
 
     for field in ["valid", "data", "errors"]:
@@ -32,7 +37,7 @@ def run_test(name, request, expected):
 
 # Test 1: Valid data
 request = {
-    "data": {"name": "Alice", "age": 25},
+    "data": {"name": "lorelei", "age": 32},
     "rules": {
         "name": {"required": True, "type": "string"},
         "age": {"required": True, "type": "number", "min": 0, "max": 120},
@@ -41,7 +46,7 @@ request = {
 
 expected = {
     "valid": True,
-    "data": {"name": "Alice", "age": 25},
+    "data": {"name": "Lorelei", "age": 32},
     "errors": [],
 }
 

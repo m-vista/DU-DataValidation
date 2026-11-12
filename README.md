@@ -65,7 +65,7 @@ socket = context.socket(zmq.REQ)
 socket.connect("tcp://127.0.0.1:55001")
 
 request = {
-    "data": {"name": "Alice", "age": 25},
+    "data": {"name": "Lorelei", "age": 32},
     "rules": {
         "name": {"required": True},
         "age": {"required": True},
@@ -105,7 +105,7 @@ Example successful response:
 ```json
 {
   "valid": true,
-  "data": {"name": "Alice", "age": 25},
+  "data": {"name": "Lorelei", "age": 32},
   "errors": []
 }
 ```
@@ -126,19 +126,23 @@ Invalid JSON or an invalid request structure also returns `valid: false`,
 ## UML Sequence Diagram
 
 ```mermaid
-%%{init: 
-    {"sequence": {"mirrorActors": false},
-    "themeCSS": ".actor-line { stroke-dasharray: 6 6; }"}
-    }%%
+%%{init: {"sequence": {"mirrorActors": false}, "themeCSS": ".actor-line { stroke-dasharray: 6 6; }"}}%%
 sequenceDiagram
     participant Client as Requesting Program
     participant Service as Data Validation Service
 
     activate Client
-    Client->>Service: JSON request: data, rules
+    Note left of Client: Send request as JSON object<br/>{"data":.. , "rules":..}
+    Client->>Service: socket.send_json(request)
     activate Service
+
+    Service->>Service: socket.recv()
+    Service->>Service: json.loads(message)
     Service->>Service: process_request(request)
-    Service-->>Client: JSON response: valid, data, errors
+    Service-->>Client: socket.send_json(response)
+    Note right of Service: Send response as JSON object<br/>{"valid":.. , "data":.. , "errors":[..]}
     deactivate Service
     deactivate Client
+
+    Note left of Client: Receive JSON containing<br/>valid, data, and errors
 ```
