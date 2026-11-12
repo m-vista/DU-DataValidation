@@ -37,7 +37,7 @@ def run_test(name, request, expected):
 
 # Test 1: Valid data
 request = {
-    "data": {"name": "lorelei", "age": 32},
+    "data": {"name": "Lorelei", "age": 32},
     "rules": {
         "name": {"required": True, "type": "string"},
         "age": {"required": True, "type": "number", "min": 0, "max": 120},

@@ -22,19 +22,74 @@ def validate_required_field(data, rules):
 
     return errors
 
+
 def validate_data_type(data, rules):
     errors = []
 
-    # TO-DO: Data type validation
+    for field, field_rules in rules.items():
+        expected_type = field_rules.get("type")
+
+        if expected_type is None:
+            continue
+
+        value = data.get(field)
+
+        # Missing values are handled by required-field validation
+        if value is None:
+            continue
+
+        if expected_type == "string":
+            if not isinstance(value, str):
+                errors.append(f"{field}: must be a string")
+
+        elif expected_type == "number":
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                errors.append(f"{field}: must be a number")
 
     return errors
 
-def validate_numerical_range(data,rules):
+
+
+def validate_numerical_range(data, rules):
     errors = []
 
-    # TO-DO: Numerical range validation
+    for field, field_rules in rules.items():
+        minimum = field_rules.get("min")
+        maximum = field_rules.get("max")
+
+        # Skip fields without numerical range rules
+        if minimum is None and maximum is None:
+            continue
+
+        # Check that range limits are valid numbers
+        if minimum is not None:
+            if isinstance(minimum, bool) or not isinstance(minimum, (int, float)):
+                errors.append(f"{field}: min must be a number")
+                continue
+
+        if maximum is not None:
+            if isinstance(maximum, bool) or not isinstance(maximum, (int, float)):
+                errors.append(f"{field}: max must be a number")
+                continue
+
+        value = data.get(field)
+
+        # Missing values are handled by required-field validation
+        if value is None:
+            continue
+
+        # Incorrect data types are handled by type validation
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            continue
+
+        if minimum is not None and value < minimum:
+            errors.append(f"{field} must be at least {minimum}")
+
+        if maximum is not None and value > maximum:
+            errors.append(f"{field} must be at most {maximum}")
 
     return errors
+
 
 def process_request(request):
 
