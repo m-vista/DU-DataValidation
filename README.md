@@ -2,7 +2,7 @@
 
 Authors: Charles Gilbert and Mohana Vista
 
-A Python microservice that checks incoming records for required fields, valid data types, and valid numerical ranges, then returns the data or appropraite error messages. 
+A Python microservice that checks incoming records for required fields, valid data types, and valid numerical ranges, then returns the data or appropriate error messages. 
 
 ## Requirements
 
@@ -34,7 +34,7 @@ A Python microservice that checks incoming records for required fields, valid da
     Windows: `python data_validation.py`
 
 ## Communication
-Data Validation Services uses ZeroMQ RED/REP sockets over TCP. Requests and responses are JSON objects.
+Data Validation Services uses ZeroMQ REQ/REP sockets over TCP. Requests and responses are JSON objects.
 
 - Endpoint: `tcp://127.0.0.1:55001`
 
@@ -47,7 +47,7 @@ Connect to the service and send a JSON object containing 'data' and 'rules'.
 | `rules` | Object containing validation rules for each field. |
 
 
-Rules accepts the following keys:
+Rules accept the following keys:
 | Rule | Type | Description |
 |---|---|---|
 | `required` | Boolean | Whether a value must be present. Defaults to `false`. |
